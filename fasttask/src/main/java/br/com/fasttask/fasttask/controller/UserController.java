@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fasttask.fasttask.exceptions.InvalidRequestException;
+import br.com.fasttask.fasttask.exceptions.EmailAlreadyExistsException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.service.IUserService;
 
@@ -23,9 +25,18 @@ public class UserController {
 	private IUserService userService;
 	
 	@PostMapping
-	public ResponseEntity<User> createUser(@RequestBody User user) {
-		User newUser = userService.createNewUser(user);
-		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+	public ResponseEntity<Object> createUser(@RequestBody User user) {
+
+        try {
+            User newUser = userService.createNewUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (InvalidRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar usuário");
+        }
 	}
 	
 	@GetMapping("/{id}")

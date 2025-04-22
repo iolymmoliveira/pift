@@ -24,7 +24,7 @@ public class User {
 	@Column(name = "email", nullable = false, unique = true, length = 100)
 	private String email;
 	
-	@Column(name = "password", nullable = false, length = 45)
+	@Column(name = "password", nullable = false, length = 100)
 	private String password;
 	
 	@Column(name = "name", length = 100)
@@ -47,6 +47,11 @@ public class User {
 	private List<Task> tasks;
 
 	public User() {
+	}
+	
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
 	}
 
 	public User(Integer id, String email, String password, String name, String address, String phone,

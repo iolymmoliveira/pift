@@ -1,8 +1,11 @@
 package br.com.fasttask.fasttask.service;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.fasttask.fasttask.exceptions.EmailAlreadyExistsException;
+import br.com.fasttask.fasttask.exceptions.InvalidRequestException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.repository.IUserRepository;
 
@@ -13,8 +16,19 @@ public class UserServiceImpl implements IUserService {
 	private IUserRepository userRepository;
 	
 	@Override
-	public User createNewUser(User user) {
-		return userRepository.save(user);
+	public User createNewUser(User user) throws InvalidRequestException, EmailAlreadyExistsException {	
+			
+        if (user.getEmail() == null || user.getPassword() == null) {
+            throw new InvalidRequestException("Email e senha são obrigatórios!");
+        }
+        
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+        	throw new EmailAlreadyExistsException("E-mail já cadastrado!");
+        }
+        
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+        return userRepository.save(user);       
+            
 	}
 	
 	@Override
@@ -30,5 +44,10 @@ public class UserServiceImpl implements IUserService {
 	@Override
     public User findUserById(Integer userId) {
 		return userRepository.findById(userId);
+	}
+	
+	@Override
+	public User findUserByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 }

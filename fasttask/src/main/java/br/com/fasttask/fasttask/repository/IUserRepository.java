@@ -8,5 +8,5 @@ public interface IUserRepository {
 	User update(User user);
 	void delete(User user);
 	User findById(Integer id);
-	
+	User findByEmail(String email);
 }

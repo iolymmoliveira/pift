@@ -1,5 +1,7 @@
 package br.com.fasttask.fasttask.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import br.com.fasttask.fasttask.model.User;
@@ -35,5 +37,11 @@ public class UserRepositoryImpl implements IUserRepository {
 	@Override
 	public User findById(Integer id) {
 		return entityManager.find(User.class, id);
+	}
+	
+	@Override
+	public User findByEmail(String email) {
+		List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class).setParameter("email", email).getResultList();
+		return users.isEmpty() ? null : users.get(0);
 	}
 }
