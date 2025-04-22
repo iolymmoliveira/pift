@@ -28,6 +28,16 @@ public class Subitem {
 	@JoinColumn(name = "task_id")
 	private Task task;
 
+	public Subitem() {
+	}
+
+	public Subitem(Integer id, String description, Boolean active, Task task) {
+		this.id = id;
+		this.description = description;
+		this.active = active;
+		this.task = task;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -59,5 +69,4 @@ public class Subitem {
 	public void setTask(Task task) {
 		this.task = task;
 	}
-
 }

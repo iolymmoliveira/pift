@@ -45,6 +45,21 @@ public class Task {
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Subitem> subitems;
 
+	public Task() {
+	}
+
+	public Task(Integer id, String name, String description, String status, String priority, LocalDateTime created_date,
+			User user, List<Subitem> subitems) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.status = status;
+		this.priority = priority;
+		this.created_date = created_date;
+		this.user = user;
+		this.subitems = subitems;
+	}
+
 	public Integer getId() {
 		return id;
 	}
