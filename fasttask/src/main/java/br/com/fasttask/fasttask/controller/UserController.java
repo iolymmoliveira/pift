@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fasttask.fasttask.exceptions.InvalidRequestException;
-import br.com.fasttask.fasttask.exceptions.EmailAlreadyExistsException;
+import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
+import br.com.fasttask.fasttask.exception.InvalidRequestException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.service.IUserService;
 
@@ -35,7 +35,7 @@ public class UserController {
         } catch (InvalidRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar usuário");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar usuário!");
         }
 	}
 	

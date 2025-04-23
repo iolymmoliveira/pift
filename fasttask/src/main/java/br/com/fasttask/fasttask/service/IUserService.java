@@ -1,7 +1,7 @@
 package br.com.fasttask.fasttask.service;
 
-import br.com.fasttask.fasttask.exceptions.EmailAlreadyExistsException;
-import br.com.fasttask.fasttask.exceptions.InvalidRequestException;
+import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
+import br.com.fasttask.fasttask.exception.InvalidRequestException;
 import br.com.fasttask.fasttask.model.User;
 
 public interface IUserService {

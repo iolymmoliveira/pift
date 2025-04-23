@@ -4,8 +4,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.fasttask.fasttask.exceptions.EmailAlreadyExistsException;
-import br.com.fasttask.fasttask.exceptions.InvalidRequestException;
+import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
+import br.com.fasttask.fasttask.exception.InvalidRequestException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.repository.IUserRepository;
 

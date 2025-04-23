@@ -1,4 +1,4 @@
-package br.com.fasttask.fasttask.exceptions;
+package br.com.fasttask.fasttask.exception;
 
 public class EmailAlreadyExistsException extends Exception {
 	
