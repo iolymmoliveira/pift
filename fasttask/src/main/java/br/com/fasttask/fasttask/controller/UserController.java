@@ -41,10 +41,16 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable Integer id) {
+	public ResponseEntity<Object> getUserById(@PathVariable Integer id) {
 		
-		User user = userService.findUserById(id);	
-		return (user != null) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		try {
+	        User user = userService.findUserById(id);
+	        return ResponseEntity.status(HttpStatus.OK).body(user);
+	    } catch (UserNotFoundException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar usuário!");
+	    }
 	}
 	
 	@PutMapping("/{id}")
@@ -70,13 +76,20 @@ public class UserController {
 
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
-		User userToDelete = userService.findUserById(id);
-		if (userToDelete != null) {
-			userService.deleteUser(userToDelete);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<Object> deleteUser(@PathVariable Integer id) {
+		
+	    try {
+	        User userToDelete = userService.findUserById(id);
+	        if (userToDelete != null) {
+	            userService.deleteUser(userToDelete);
+	            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");
+	        }
+	    } catch (InvalidRequestException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao excluir usuário!");
+	    }
 	}
 }

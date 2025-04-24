@@ -4,17 +4,19 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
-import br.com.fasttask.fasttask.exception.InvalidRequestException;
-import br.com.fasttask.fasttask.exception.UserNotFoundException;
+import br.com.fasttask.fasttask.exception.*;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.repository.IUserRepository;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
+	private final IUserRepository userRepository;
+	
 	@Autowired
-	private IUserRepository userRepository;
+	public UserServiceImpl(IUserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 	
 	@Override
 	public User createNewUser(User user) throws InvalidRequestException, EmailAlreadyExistsException {	
@@ -58,17 +60,33 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public void deleteUser(User user) {
-		userRepository.delete(user);
+	public void deleteUser(User user) throws InvalidRequestException, UserNotFoundException {
+		
+		if (user.getId() == null) throw new InvalidRequestException("Id do usuário é obrigatório para exclusão!");
+		
+		User currentUser = findUserById(user.getId());
+		if (currentUser == null) throw new UserNotFoundException("Usuário não encontrado!");
+		
+		userRepository.delete(currentUser);
 	}
 	
 	@Override
-    public User findUserById(Integer userId) {
-		return userRepository.findById(userId);
+    public User findUserById(Integer userId) throws UserNotFoundException {
+		
+		User user = userRepository.findById(userId);
+		
+		if (user == null) throw new UserNotFoundException("Usuário não encontrado!");
+		
+		return user;
 	}
 	
 	@Override
-	public User findUserByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public User findUserByEmail(String email) throws UserNotFoundException {
+		
+		User user = userRepository.findByEmail(email);
+		
+		if (user == null) throw new UserNotFoundException("Usuário não encontrado!");
+		
+		return user;
 	}
 }
