@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
 import br.com.fasttask.fasttask.exception.InvalidRequestException;
+import br.com.fasttask.fasttask.exception.UserNotFoundException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.repository.IUserRepository;
 
@@ -32,7 +33,27 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public User updateUser(User user) {
+	public User updateUser(User user)  throws InvalidRequestException, UserNotFoundException, EmailAlreadyExistsException {
+		
+		if (user.getId() == null) {
+	        throw new InvalidRequestException("Id do usuário é obrigatório para atualização!");
+	    }
+
+	    User persistedUser = findUserById(user.getId());
+	    if (persistedUser == null) {
+	        throw new UserNotFoundException("Usuário não encontrado!");
+	    }
+
+	    // Verificar se o email foi alterado e se já existe outro usuário com o mesmo email
+	    if (!persistedUser.getEmail().equals(user.getEmail()) && userRepository.findByEmail(user.getEmail()) != null) {
+	        throw new EmailAlreadyExistsException("E-mail já cadastrado para outro usuário!");
+	    }
+
+	    // Se a senha foi alterada, criptografar a nova senha
+	    if (!BCrypt.checkpw(user.getPassword(), persistedUser.getPassword())) {
+	        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+	    }
+
 		return userRepository.update(user);
 	}
 	

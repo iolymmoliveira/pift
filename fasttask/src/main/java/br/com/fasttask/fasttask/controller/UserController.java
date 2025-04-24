@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
 import br.com.fasttask.fasttask.exception.InvalidRequestException;
+import br.com.fasttask.fasttask.exception.UserNotFoundException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.service.IUserService;
 
@@ -47,11 +48,24 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
-		if (!id.equals(user.getId())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	public ResponseEntity<Object> updateUser(@PathVariable Integer id, @RequestBody User user) {
 		
-		User updatedUser = userService.updateUser(user);	
-		return (updatedUser != null) ? new ResponseEntity<>(updatedUser, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		try {
+			
+			if (!id.equals(user.getId()))
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id do usuário não confere!");
+
+			User updatedUser = userService.updateUser(user);
+			return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+		} catch (UserNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (EmailAlreadyExistsException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+		} catch (InvalidRequestException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar usuário!");
+		}
 	}
 
 	
