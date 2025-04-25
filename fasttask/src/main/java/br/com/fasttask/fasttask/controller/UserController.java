@@ -17,6 +17,7 @@ import br.com.fasttask.fasttask.exception.InvalidRequestException;
 import br.com.fasttask.fasttask.exception.UserNotFoundException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.service.IUserService;
+import dto.UserLoginDTO;
 
 @RestController
 @RequestMapping("/user")
@@ -90,6 +91,20 @@ public class UserController {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao excluir usuário!");
+	    }
+	}
+	
+	@PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody UserLoginDTO userLoginDTO) {
+	    try {
+	    	User user = userService.authenticateUser(userLoginDTO.getEmail(), userLoginDTO.getPassword());
+	        return ResponseEntity.status(HttpStatus.OK).body(user);
+	    } catch (UserNotFoundException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	    } catch (InvalidRequestException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao autenticar usuário!");
 	    }
 	}
 }

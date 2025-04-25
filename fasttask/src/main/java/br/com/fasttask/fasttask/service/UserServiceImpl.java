@@ -89,4 +89,19 @@ public class UserServiceImpl implements IUserService {
 		
 		return user;
 	}
+	
+	@Override
+	public User authenticateUser(String email, String password) throws InvalidRequestException, UserNotFoundException {
+		
+		User user = findUserByEmail(email);
+		if (user == null) {
+			throw new UserNotFoundException("Usuário não encontrado!");
+		} 
+		
+		if (!BCrypt.checkpw(password, user.getPassword())) {
+			throw new InvalidRequestException("Senha Inválida!");
+		}
+		
+		return user;
+	}
 }

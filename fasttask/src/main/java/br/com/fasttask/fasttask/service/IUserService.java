@@ -10,4 +10,5 @@ public interface IUserService {
 	public void deleteUser(User user) throws InvalidRequestException, UserNotFoundException; 
     public User findUserById(Integer userId) throws UserNotFoundException;
     public User findUserByEmail(String email) throws UserNotFoundException;
+    public User authenticateUser(String email, String password) throws InvalidRequestException, UserNotFoundException;
 }
