@@ -27,14 +27,15 @@ Uma aplicação de gerenciamento de tarefas desenvolvida em **Java com Maven**.
 
 ## 🗂 **Estrutura do Projeto**
 
-br.com.fasttask.fasttask         → Pacote principal da aplicação 
+```bash
+br.com.fasttask.fasttask         → Pacote principal da aplicação
 ├── model                        → Entidades (User, Task, Subitem) 
-├── dto                          → Objetos de transferência de dados (DTOs) 
-├── repository                   → Interfaces de repositório 
-├── service                      → Regras de negócio 
-├── controller                   → Requisições HTTP 
+├── dto                          → Objetos de transferência de dados (DTOs)
+├── repository                   → Interfaces de repositório
+├── service                      → Regras de negócio
+├── controller                   → Requisições HTTP
 └── exception                    → Tratamento de exceções personalizadas
-
+```
 
 ---
 
