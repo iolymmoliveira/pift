@@ -1,5 +1,7 @@
 package br.com.fasttask.fasttask.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class Subitem {
 	
 	@ManyToOne
 	@JoinColumn(name = "task_id")
+	@JsonBackReference
 	private Task task;
 
 	public Subitem() {
