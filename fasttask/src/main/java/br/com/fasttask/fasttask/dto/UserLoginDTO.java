@@ -1,4 +1,4 @@
-package dto;
+package br.com.fasttask.fasttask.dto;
 
 public class UserLoginDTO {
 

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fasttask.fasttask.dto.UserLoginDTO;
 import br.com.fasttask.fasttask.exception.EmailAlreadyExistsException;
 import br.com.fasttask.fasttask.exception.InvalidRequestException;
 import br.com.fasttask.fasttask.exception.UserNotFoundException;
 import br.com.fasttask.fasttask.model.User;
 import br.com.fasttask.fasttask.service.IUserService;
-import dto.UserLoginDTO;
 
 @RestController
 @RequestMapping("/user")
